@@ -27,7 +27,7 @@ To use the AMAG Data Analysis project, follow these steps:
 
 1. Clone the repository to your local machine.
 	```bash
-	git clone https://
+	git clone https://github.com/mehedi-sust/car-data-analysis.git
 	```
 2. Install the required dependencies installed .
 	```bash

@@ -1,14 +1,42 @@
+"""
+test_vehicle_data.py
+
+This module contains unit tests for the VehicleData class.
+
+"""
 import unittest
-from framework.VehicleData import VehicleData
-import numpy as np
 import os
+import matplotlib
+
+matplotlib.use("agg")
 import matplotlib.pyplot as plt
-import matplotlib.testing as mptesting
+import numpy as np
+from framework.vehicle_data import VehicleData
 
 
 class TestVehicleData(unittest.TestCase):
+    """
+    TestVehicleData class
+
+    This class defines the unit tests for the VehicleData class.
+
+    Methods:
+        setUpClass(cls)
+        tearDownClass(cls)
+        setUp(self)
+        tearDown(self)
+        test_pitfall_check(self)
+        test_by_id(self)
+        test_split_segments(self)
+        test_filter(self)
+        test_plot(self)
+
+    """
+
     def setUp(self):
-        # setup test data and test data file
+        """
+        setup test data and test data file
+        """
         data = np.array(
             [
                 [1, 0, 23.7822085, 90.8496086],
@@ -22,11 +50,15 @@ class TestVehicleData(unittest.TestCase):
         np.save(self.test_data_file, data)
 
     def tearDown(self):
-        # remove test data file
+        """
+        remove test data file
+        """
         os.remove(self.test_data_file)
 
     def test_split_segments(self):
-        # test the split segments method
+        """
+        test the split segments method
+        """
         obj = VehicleData(self.test_data_file)
         segments = obj.split_segments()
 
@@ -38,7 +70,9 @@ class TestVehicleData(unittest.TestCase):
         self.assertEqual(set(ids), {0, 1})
 
     def test_by_id(self):
-        # test getting data by id
+        """
+        test getting data by id
+        """
         obj = VehicleData(self.test_data_file)
 
         first_id = obj.by_id(0)
@@ -49,7 +83,9 @@ class TestVehicleData(unittest.TestCase):
         self.assertTrue(np.all(second_data[:, 1] == 1))
 
     def test_pitfall_check(self):
-        # test pitfall check
+        """
+        test pitfall check
+        """
         obj = VehicleData("test_data.npy")
         has_pitfall = obj.pitfall_check()
 
@@ -57,14 +93,15 @@ class TestVehicleData(unittest.TestCase):
         self.assertFalse(has_pitfall)
 
     def test_plot(self):
-        # test the plot image
+        """
+        test the plot image against the expected image
+        """
         obj = VehicleData("test_data.npy")
 
         segments = obj.split_segments()
 
         # plot segments
-
-        fig, ax = plt.subplots()
+        fig, _ = plt.subplots()
         obj.plot(segments)
 
         fig.savefig("./tests/actual_plot.png")
@@ -76,6 +113,7 @@ class TestVehicleData(unittest.TestCase):
 
         # cleanup the generated plot image
         plt.close(fig)
+
         os.remove("./tests/actual_plot.png")
 
 
